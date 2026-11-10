@@ -178,13 +178,9 @@ const BoardDetail = () => {
   const onCommentSubmit = async (e) => {
     e.preventDefault();
     if (commentText.trim() === "") return;
-    if (!myEmail) {
-      alert("로그인이 필요합니다.");
-      nav("/");
-      return;
-    }
+
     try {
-      const res = await AxiosApi.commentWrite(boardId, commentText, myEmail);
+      const res = await AxiosApi.commentWrite(boardId, commentText);
       if (res.data) {
         setCommentText(""); // 입력창 비우기
         fetchComments(); // 목록 새로고침
@@ -253,11 +249,11 @@ const BoardDetail = () => {
                     {c.regDate?.substring(0, 16).replace("T", " ")}
                   </span>
                   {/* 내 댓글일 때만 삭제 버튼 표시 */}
-                  {c.email === myEmail && (
+                  {
                     <DeleteBtn onClick={() => onCommentDelete(c.commentId)}>
                       삭제
                     </DeleteBtn>
-                  )}
+                  }
                 </CommentMeta>
                 <CommentText>{c.content}</CommentText>
               </CommentItem>
