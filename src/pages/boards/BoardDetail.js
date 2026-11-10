@@ -141,7 +141,6 @@ const BoardDetail = () => {
   const [comments, setComments] = useState([]); // 댓글 목록
   const [commentText, setCommentText] = useState(""); // 댓글 입력값
   const nav = useNavigate();
-  const myEmail = localStorage.getItem("email"); // 로그인한 사용자
 
   // 게시글 상세 조회: GET /board/{id}
   useEffect(() => {
