@@ -57,15 +57,18 @@ const Login = () => {
   const onSubmit = async (e) => {
     e.preventDefault(); // 페이지 새로고침 방지
 
-    const response = await AxiosApi.memberLogin(inputEmail, inputPwd);
-    console.log(response.data);
-
-    if (response.data) {
+    try {
+      const response = await AxiosApi.memberLogin(inputEmail, inputPwd);
+      console.log(response.data);
+      // 응답: { grantType, accessToken, accessTokenExpiresIn, refreshToken, refreshTokenExpiresIn }
+      localStorage.setItem("accessToken", response.data.accessToken);
+      localStorage.setItem("refreshToken", response.data.refreshToken);
+      localStorage.setItem("email", inputEmail); // 화면 표시용 (내 댓글 삭제 버튼 등)
       localStorage.setItem("isLogin", "TRUE");
-      localStorage.setItem("email", inputEmail);
       nav("/home", { replace: true }); // 뒤로가기로 로그인 화면에 다시 오지 않도록
-    } else {
-      alert("이메일 또는 비밀번호가 틀립니다.");
+    } catch (err) {
+      // 실패 시 서버가 401 + { message, code } 응답
+      alert(err.response?.data?.message ?? "이메일 또는 비밀번호가 틀립니다.");
     }
   };
 
